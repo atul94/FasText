@@ -1,0 +1,62 @@
+function [showimg,check_ff]=floodfill_2(showimg,bwimg,check_ff,check_b_d,threshold,th,rows,col,x,y,b_d,c)
+if(check_ff(x,y)==1)
+    return;
+elseif(check_b_d~=b_d)
+    return;
+elseif(c>=400)
+    return;
+else
+    if(b_d==-1)
+        if(check_b_d(x,y)~=1)
+            if(th<threshold(x,y)&&check_b_d(x,y)==-1)
+                th=threshold(x,y);
+            end
+            if(bwimg(x,y)<=th)
+                showimg(x,y,1)=255;
+                showimg(x,y,2)=0;
+                showimg(x,y,3)=0;
+                check_ff(x,y)=1;
+                c=c+1;
+            end
+        end
+    else
+        if(check_b_d(x,y)~=-1)
+            if(th>threshold(x,y)&&check_b_d(x,y)==1)
+                th=threshold(x,y);
+            end
+            if(bwimg(x,y)>=th)
+                showimg(x,y,1)=255;
+                showimg(x,y,2)=0;
+                showimg(x,y,3)=0;
+                check_ff(x,y)=1;
+                c=c+1;
+            end
+        end
+    end
+    if(check_ff(x,y)==1)
+         if(x-1>0)
+             [showimg,check_ff]=floodfill_2(showimg,bwimg,check_ff,check_b_d,threshold,th,rows,col,x-1,y,b_d,c);
+         end
+         if(x+1<=rows)
+             [showimg,check_ff]=floodfill_2(showimg,bwimg,check_ff,check_b_d,threshold,th,rows,col,x+1,y,b_d,c);
+         end
+         if(y-1>0)
+             [showimg,check_ff]=floodfill_2(showimg,bwimg,check_ff,check_b_d,threshold,th,rows,col,x,y-1,b_d,c);
+         end
+         if(y+1<=col)
+             [showimg,check_ff]=floodfill_2(showimg,bwimg,check_ff,check_b_d,threshold,th,rows,col,x,y+1,b_d,c);
+         end
+         if(y-1>0&&x-1>0)
+             [showimg,check_ff]=floodfill_2(showimg,bwimg,check_ff,check_b_d,threshold,th,rows,col,x-1,y-1,b_d,c);
+         end
+         if(y+1<=col&&x-1>0)
+             [showimg,check_ff]=floodfill_2(showimg,bwimg,check_ff,check_b_d,threshold,th,rows,col,x-1,y+1,b_d,c);
+         end
+         if(y+1<=col&&x+1<=rows)
+             [showimg,check_ff]=floodfill_2(showimg,bwimg,check_ff,check_b_d,threshold,th,rows,col,x+1,y+1,b_d,c);
+         end
+         if(y-1>0&&x+1<=rows)
+             [showimg,check_ff]=floodfill_2(showimg,bwimg,check_ff,check_b_d,threshold,th,rows,col,x+1,y-1,b_d,c);
+         end
+    end
+end
