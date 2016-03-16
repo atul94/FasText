@@ -14,10 +14,10 @@ clear all;clc;
 myDir = 'C:/Users/Atul Agarwal/Desktop/btp1/papers/1/MRRCTrainImages/';
 myDir2 = 'C:/Users/Atul Agarwal/Desktop/btp1/papers/1/MRRCTestImages/';
 ext_img = '*.JPG';
-[my_img,my_img2]=read_images(mDir,myDir2,ext_img);
+[my_img,my_img2]=read_images(myDir,myDir2,ext_img);
 
 %% The Project begins
-inputimg=my_img2(5).img;
+inputimg=my_img2(1).img;
 inputimg=imresize(inputimg,1/(1.6*1.6));
 bwimg=rgb2gray(inputimg);
 %bwimg=imresize(bwimg,1/1.6);
