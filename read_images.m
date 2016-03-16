@@ -1,4 +1,4 @@
-function [my_img,my_img2] = read_images(mDir,myDir2,ext_img)
+function [my_img,my_img2] = read_images(myDir,myDir2,ext_img)
 
 a = dir([myDir ext_img]);
 nfile = max(size(a)) ;
