@@ -3,7 +3,7 @@ if(check_ff(x,y)==1)
     return;
 elseif(check_b_d~=b_d)
     return;
-elseif(c>=400)
+elseif(c>=480)
     return;
 else
     if(b_d==-1)
@@ -12,8 +12,8 @@ else
                 th=threshold(x,y);
             end
             if(bwimg(x,y)<=th)
-                showimg(x,y,1)=255;
-                showimg(x,y,2)=0;
+                showimg(x,y,1)=0;
+                showimg(x,y,2)=255;
                 showimg(x,y,3)=0;
                 check_ff(x,y)=1;
                 c=c+1;
@@ -25,8 +25,8 @@ else
                 th=threshold(x,y);
             end
             if(bwimg(x,y)>=th)
-                showimg(x,y,1)=255;
-                showimg(x,y,2)=0;
+                showimg(x,y,1)=0;
+                showimg(x,y,2)=255;
                 showimg(x,y,3)=0;
                 check_ff(x,y)=1;
                 c=c+1;
