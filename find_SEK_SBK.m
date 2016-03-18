@@ -1,5 +1,7 @@
-function [SEK,SBK,check_b_d,max_d_intensity,min_b_intensity]=find_SEK_SBK(bwimg,SEK,SBK,check_b_d,max_d_intensity,min_b_intensity)
+function [SEK,SBK,check_b_d,max_d_intensity,min_b_intensity]=find_SEK_SBK(bwimg,check_b_d,max_d_intensity,min_b_intensity,rows,col)
 m=13;
+SEK=zeros(rows,col);
+SBK=zeros(rows,col);
 for i = 3 : size(bwimg,1) - 2
       for j = 3 : size(bwimg,2) - 2
           b=bwimg(i,j)+m;
@@ -10,6 +12,7 @@ for i = 3 : size(bwimg,1) - 2
           pi(1)=bwimg(i-1,j);pi(2)=bwimg(i-1,j+1);pi(3)=bwimg(i,j+1);pi(4)=bwimg(i+1,j+1);
           pi(5)=bwimg(i+1,j);pi(6)=bwimg(i+1,j-1);pi(7)=bwimg(i,j-1);pi(8)=bwimg(i-1,j-1);
           flag=0;max_value_b=0;max_value_d=0;count_bp=0;count_dp=0;count_sp=0;minb=255;maxd=0;
+          sp_index=zeros(1,12);dp_index=zeros(1,12);bp_index=zeros(1,12);
           for k = 1 : 12
               if(P(k)<b&&P(k)>d)
                     if(k<=6)    
@@ -61,16 +64,16 @@ for i = 3 : size(bwimg,1) - 2
                     end
                     count_sp=count_sp+1;
                     if(count_sp==1)
-                        sp_index(count_sp)=i;
+                        sp_index(count_sp)=k;
                     else
-                        sp_index(count_sp)=i-sp_index(count_sp-1);
+                        sp_index(count_sp)=k-sum(sp_index);
                     end
               elseif(P(k)>=b)
                   count_bp=count_bp+1;
                   if(count_bp==1)
-                        bp_index(count_bp)=i;
+                        bp_index(count_bp)=k;
                   else
-                        bp_index(count_bp)=i-bp_index(count_bp-1);
+                        bp_index(count_bp)=k-sum(bp_index);
                   end
                   x=P(k)-bwimg(i,j);
                   if(x>max_value_b)
@@ -83,9 +86,9 @@ for i = 3 : size(bwimg,1) - 2
               else
                   count_dp=count_dp+1;
                   if(count_dp==1)
-                        dp_index(count_dp)=i;
+                        dp_index(count_dp)=k;
                     else
-                        dp_index(count_dp)=i-dp_index(count_dp-1);
+                        dp_index(count_dp)=k-sum(dp_index);
                   end
                   x=bwimg(i,j)-P(k);
                   if(x>max_value_d)
