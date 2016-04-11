@@ -87,6 +87,52 @@ end
  figure,
  imshow(showimg2/255);
 %% Classification
- binimg = rgb2bin(showimg); %check_b_d=1 dark point
- binimg2 = rgb2bin(showimg2); %check_b_d=-1 bright point
- 
+%  binimg = rgb2bin(showimg); %check_b_d=1 dark point
+%  binimg2 = rgb2bin(showimg2); %check_b_d=-1 bright point
+
+showimg3 = bwimg;
+[row7 col7] = find(SEK>0);
+visited = zeros(rows,col);
+temp_t = zeros(rows,col);
+[x_1,y_1] = find(showimg2(:,:,2) == 255);
+for i = 1:size(x_1,1)
+    temp_t(x_1(i),y_1(i)) = 1;
+end
+regions = bwlabel(temp_t);
+areas = zeros(max(max(regions)),1);
+mapping = [-2,0;-2,1;-1,2;0,2;1,2;2,1;2,0;2,-1;1,-2;0,-2;-1,-2;-2,-1];
+SSK = zeros(rows,col);
+for i = 1:size(row7)
+    m = 13;
+    x = row7(i);
+    y = col7(i);
+    r = regions(x,y);
+    c = 0;
+    SSK(x,y) = 2;
+    if(visited(x,y)==0 && r ~= 0)
+        visited(x,y) = 1;
+        b_temp=bwimg(x,y)+m;
+        d_temp=bwimg(x,y)-m;
+        temp(1)=bwimg(x-2,y);temp(2)=bwimg(x-2,y+1);temp(3)=bwimg(x-1,y+2);temp(4)=bwimg(x,y+2);
+        temp(5)=bwimg(x+1,y+2);temp(6)=bwimg(x+2,y+1);temp(7)=bwimg(x+2,y);temp(8)=bwimg(x+2,y-1);
+        temp(9)=bwimg(x+1,y-2);temp(10)=bwimg(x,y-2);temp(11)=bwimg(x-1,y-2);temp(12)=bwimg(x-2,y-1);
+        max= 0;
+        k_val = 0;
+        min = inf;
+        for k = 1:12
+            if temp(k)<b_temp && temp(k)>d_temp
+                if temp(k)>max
+                    max = temp(k);
+                    k_val = k;
+                end
+                if temp(k)<min
+                    min = temp(k);
+                    k_val1 = k;
+                end
+            end
+        end
+        if r == regions(x+mapping(k_val,1),y+mapping(k_val,2)) && k_val ~= 0
+            [showimg3,visited,SSK,areas] = CSA(showimg3,visited,x+mapping(k_val,1),y+mapping(k_val,2),SSK,mapping,regions,areas,r,c);    
+        end
+    end
+end
