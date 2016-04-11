@@ -18,8 +18,10 @@ clear all;clc;close all;
 
 %% The Project begins
 %inputimg=my_img(52).img;
-inputimg=imread('C:/Users/Atul Agarwal/Desktop/btp1/papers/1/MRRCTestImages/T044.JPG');
-inputimg=imresize(inputimg,1/(1.6*1.6*1.6*1.6));
+%inputimg=imread('C:/Users/Atul Agarwal/Desktop/btp1/papers/1/MRRCTestImages/T044.JPG');
+inputimg=imread('C:/Users/Atul Agarwal/Desktop/btp1/New Folder/2_1.JPG');
+inputimg=imread('./image.jpg');
+%inputimg=imresize(inputimg,1/(1.6*1.6*1.6*1.6));
 figure,
 imshow(inputimg);
 bwimg=rgb2gray(inputimg);
@@ -34,7 +36,7 @@ check_b_d=zeros(rows,col);%Whether the points surrounding the given point is dar
 min_b_intensity=zeros(rows,col);
 max_d_intensity=zeros(rows,col);
 m=13;
-[SEK,SBK,check_b_d,max_d_intensity,min_b_intensity]=find_SEK_SBK(bwimg,check_b_d,max_d_intensity,min_b_intensity,rows,col);
+[SEK,SBK,count_sp_SBK,check_b_d,max_d_intensity,min_b_intensity]=find_SEK_SBK(bwimg,check_b_d,max_d_intensity,min_b_intensity,rows,col);
 
 %% Testing the SEK and SBK thus found
 [row2 col2] = find(SBK>0);
@@ -85,6 +87,6 @@ end
  figure,
  imshow(showimg2/255);
 %% Classification
- binimg = rgb2bin(showimg); %check_ff=1 dark point
- binimg2 = rgb2bin(showimg2); %check_ff=-1 bright point
-  
+ binimg = rgb2bin(showimg); %check_b_d=1 dark point
+ binimg2 = rgb2bin(showimg2); %check_b_d=-1 bright point
+ 
