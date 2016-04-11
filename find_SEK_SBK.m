@@ -1,7 +1,8 @@
-function [SEK,SBK,check_b_d,max_d_intensity,min_b_intensity]=find_SEK_SBK(bwimg,check_b_d,max_d_intensity,min_b_intensity,rows,col)
+function [SEK,SBK,count_sp_SBK,check_b_d,max_d_intensity,min_b_intensity]=find_SEK_SBK(bwimg,check_b_d,max_d_intensity,min_b_intensity,rows,col)
 m=13;
 SEK=zeros(rows,col);
 SBK=zeros(rows,col);
+count_sp_SBK=zeros(rows,col);
 for i = 3 : size(bwimg,1) - 2
       for j = 3 : size(bwimg,2) - 2
           b=bwimg(i,j)+m;
@@ -193,10 +194,12 @@ for i = 3 : size(bwimg,1) - 2
                   SBK(i,j)=max_value_d;
                   check_b_d(i,j)=1;
                   max_d_intensity(i,j)=maxd;
+                  count_sp_SBK(i,j)=count_sp;
               else
                   SBK(i,j)=max_value_b;
                   check_b_d(i,j)=-1;
                   min_b_intensity(i,j)=minb;
+                  count_sp_SBK(i,j)=count_sp;
               end
           end
       end
