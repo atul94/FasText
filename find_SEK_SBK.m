@@ -6,8 +6,8 @@ for i = 3 : size(bwimg,1) - 2
       for j = 3 : size(bwimg,2) - 2
           b=bwimg(i,j)+m;
           d=bwimg(i,j)-m;
-          P(1)=bwimg(i-2,j);P(2)=bwimg(i-2,j+1);P(3)=bwimg(i-1,j+1);P(4)=bwimg(i,j+2);
-          P(5)=bwimg(i+1,j+2);P(6)=bwimg(i+1,j+1);P(7)=bwimg(i+2,j);P(8)=bwimg(i+2,j-1);
+          P(1)=bwimg(i-2,j);P(2)=bwimg(i-2,j+1);P(3)=bwimg(i-1,j+2);P(4)=bwimg(i,j+2);
+          P(5)=bwimg(i+1,j+2);P(6)=bwimg(i+2,j+1);P(7)=bwimg(i+2,j);P(8)=bwimg(i+2,j-1);
           P(9)=bwimg(i+1,j-2);P(10)=bwimg(i,j-2);P(11)=bwimg(i-1,j-2);P(12)=bwimg(i-2,j-1);
           pi(1)=bwimg(i-1,j);pi(2)=bwimg(i-1,j+1);pi(3)=bwimg(i,j+1);pi(4)=bwimg(i+1,j+1);
           pi(5)=bwimg(i+1,j);pi(6)=bwimg(i+1,j-1);pi(7)=bwimg(i,j-1);pi(8)=bwimg(i-1,j-1);
