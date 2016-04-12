@@ -19,9 +19,9 @@ clear all;clc;close all;
 %% The Project begins
 %inputimg=my_img(52).img;
 %inputimg=imread('C:/Users/Atul Agarwal/Desktop/btp1/papers/1/MRRCTestImages/T044.JPG');
-inputimg=imread('C:/Users/Atul Agarwal/Desktop/btp1/New Folder/2_1.JPG');
+% inputimg=imread('C:/Users/Atul Agarwal/Desktop/btp1/New Folder/2_1.JPG');
 inputimg=imread('./image.jpg');
-%inputimg=imresize(inputimg,1/(1.6*1.6*1.6*1.6));
+inputimg=imresize(inputimg,1/(1.6));
 figure,
 imshow(inputimg);
 bwimg=rgb2gray(inputimg);
@@ -86,10 +86,7 @@ end
  
  figure,
  imshow(showimg2/255);
-%% Classification
-%  binimg = rgb2bin(showimg); %check_b_d=1 dark point
-%  binimg2 = rgb2bin(showimg2); %check_b_d=-1 bright point
-
+ %% Character Stroke Area
 showimg3 = bwimg;
 [row7 col7] = find(SEK>0);
 visited = zeros(rows,col);
@@ -98,8 +95,9 @@ temp_t = zeros(rows,col);
 for i = 1:size(x_1,1)
     temp_t(x_1(i),y_1(i)) = 1;
 end
-regions = bwlabel(temp_t);
-areas = zeros(max(max(regions)),1);
+% max_val = max(max(regions));
+[regions,no_of_regions] = bwlabel(temp_t);
+areas = zeros(no_of_regions,1);
 mapping = [-2,0;-2,1;-1,2;0,2;1,2;2,1;2,0;2,-1;1,-2;0,-2;-1,-2;-2,-1];
 SSK = zeros(rows,col);
 for i = 1:size(row7)
@@ -109,7 +107,7 @@ for i = 1:size(row7)
     r = regions(x,y);
     c = 0;
     SSK(x,y) = 2;
-    if(visited(x,y)==0 && r ~= 0)
+    if(visited(x,y)==0 && r ~= 0 && check_b_d(x,y) == -1)
         visited(x,y) = 1;
         b_temp=bwimg(x,y)+m;
         d_temp=bwimg(x,y)-m;
@@ -131,8 +129,33 @@ for i = 1:size(row7)
                 end
             end
         end
-        if r == regions(x+mapping(k_val,1),y+mapping(k_val,2)) && k_val ~= 0
-            [showimg3,visited,SSK,areas] = CSA(showimg3,visited,x+mapping(k_val,1),y+mapping(k_val,2),SSK,mapping,regions,areas,r,c);    
+        if k_val ~= 0
+            if r == regions(x+mapping(k_val,1),y+mapping(k_val,2))
+                [showimg3,visited,SSK,areas] = CSA(showimg3,visited,x+mapping(k_val,1),y+mapping(k_val,2),SSK,mapping,regions,areas,r,c);    
+            end
         end
     end
 end
+[row8 col8] = find(SBK>0);
+for i = 1:size(row8)
+    x = row8(i);
+    y = col8(i);
+    if check_b_d(x,y) == -1
+        r = regions(x,y);
+        areas(r) = areas(r) + 3*count_sp_SBK(x,y);
+    end
+end
+%% Classification
+for i = 1:no_of_regions
+    areas(i) = areas(i)/size(find(regions == i),1);
+end
+finalimg=inputimg;
+for i = 1 : size(inputimg,1)
+    for j = 1 : size(inputimg,2)
+        if(regions(i,j)>0&&areas(regions(i,j))>=0.1&&areas(regions(i,j))<=10)
+            finalimg(i,j,2)=255;
+        end
+    end
+end
+figure,
+imshow(finalimg,[]);
